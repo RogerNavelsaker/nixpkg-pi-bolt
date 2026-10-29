@@ -8,8 +8,12 @@
       systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
     in {
-      packages = forAllSystems (system: {
-        default = nixpkgs.legacyPackages.${system}.callPackage ./nix/package.nix { };
-      });
+      packages = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in {
+          default = pkgs.callPackage ./nix/package.nix { };
+          jit = pkgs.callPackage ./nix/package.nix { jit = true; };
+        }
+      );
     };
 }
