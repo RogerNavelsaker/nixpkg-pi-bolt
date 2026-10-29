@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, autoPatchelfHook, glibc, jit ? false }:
+{ stdenv, fetchurl, lib, autoPatchelfHook, glibc, libxcb, makeWrapper, jit ? false }:
 
 let
   version = "1.0.7";
@@ -24,13 +24,17 @@ stdenv.mkDerivation {
     hash = hashes."${platform}-${releaseVariant}";
   };
   sourceRoot = "pi-bolt-${platform}-${releaseVariant}";
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ glibc ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ glibc libxcb ];
   dontStrip = true;
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    install -m755 pi $out/bin/${name}
+    mkdir -p $out/bin $out/libexec
+    install -m755 pi $out/libexec/${name}-bin
+    cp -r theme assets export-html native $out/libexec/
+    cp photon_rs_bg.wasm $out/libexec/
+    makeWrapper $out/libexec/${name}-bin $out/bin/${name} \
+      --set PI_PACKAGE_DIR $out/libexec
     runHook postInstall
   '';
   meta = {
