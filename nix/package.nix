@@ -1,19 +1,19 @@
 { stdenv, fetchurl, lib, autoPatchelfHook, glibc, libxcb, coreutils, jit ? false }:
 
 let
-  version = "1.0.9";
+  version = "1.3.1";
   platform = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
   architecture = if stdenv.hostPlatform.isAarch64 then "arm64" else "x64";
   variant = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then "x64-baseline" else architecture;
   releaseVariant = if jit && architecture == "x64" then "x64-jit" else variant + lib.optionalString jit "-jit";
   name = "pi-bolt" + lib.optionalString jit "-jit";
   hashes = {
-    "linux-x64-baseline" = "sha256-5nz7ATILQVrkZXjiEauqhUhBXGQNAesnOd0MmNiIPwc=";
-    "linux-arm64" = "sha256-qpX61ryquwL4xmSMY34H48fJwg20g9NmxpQPdceY80Q=";
-    "darwin-arm64" = "sha256-F3j+kIns5Rl5VAfoNKm8xd14NhChp45x4iKuS/gBwQg=";
-    "linux-x64-jit" = "sha256-OnBJaGtFdG3+55weqWmvT8YJh5JVeQ7jivmk0IiuAMM=";
-    "linux-arm64-jit" = "sha256-zrSlSB8hfe/htRY7O6CITzQAmkH9TBSYhhlkV5cuRHY=";
-    "darwin-arm64-jit" = "sha256-8ztL+KxSIcWldNkWNVybGyKwfsx8D0zdLgX12k054UI=";
+    "linux-x64-baseline" = "sha256-ngGw97lt4GXuFy9eVrjEz26rnt1FA1kAJkl/hZ90JMA=";
+    "linux-arm64" = "sha256-bYi28rtLzvzYJFpzMKH2k+0qAVgiSppoDGZ7mIvQ6hk=";
+    "darwin-arm64" = "sha256-2dERxMGkhHnnKyUZ/UHTlwVAyNJ2o+Bt7LO3+9hGVe4=";
+    "linux-x64-jit" = "sha256-adyD6fWjD91+GVmffEdEECzKJkY9fLZXNqzG/eBES8E=";
+    "linux-arm64-jit" = "sha256-dsaHxREQtncdAtwrHcfm3bK9o6LD/Yp5rfinD3Wu8bM=";
+    "darwin-arm64-jit" = "sha256-hr5FtY7b5Qdc59cArLGxccE52pzhaGGdJBz5dGBJLLk=";
   };
 in
 stdenv.mkDerivation {

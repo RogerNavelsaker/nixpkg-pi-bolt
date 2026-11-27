@@ -1,0 +1,10 @@
+{
+  "kind": "github-release",
+  "upstream": "opensec-git/Pi-Bolt",
+  "tag_prefix": "bolt-v",
+  "version_file": "nix/package.nix",
+  "version_grep": "version = \"[^\"]+\"",
+  "pinned_paths": [],
+  "pinned_flake_regex": "sha256-",
+  "sync_script": "bash scripts/sync-release.sh"
+}
